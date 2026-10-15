@@ -1,0 +1,15 @@
+{
+  "name": "apex-sample-agents",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "catalog": "node catalog.mjs",
+    "teach": "node teach.mjs",
+    "news": "node news.mjs"
+  },
+  "license": "MIT"
+}
