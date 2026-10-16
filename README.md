@@ -1,5 +1,7 @@
 # Apex sample agents
 
+[![MCP server](https://img.shields.io/badge/MCP-apexai.academy%2Fmcp-cbff56?style=flat-square)](https://apexai.academy/developers/) [![Star](https://img.shields.io/github/stars/ApexAI-Academy/sample-agents?style=flat-square)](https://github.com/ApexAI-Academy/sample-agents/stargazers)
+
 Small, read-only teaching-agent building blocks for [Apex AI Academy](https://apexai.academy/). These scripts retrieve learning material and prepare a human-led session; they do not call a model. No API key, packages or account is required.
 
 ## Quickstart
@@ -33,9 +35,36 @@ Use `open_to_everyone` and `readable`, not a hard-coded list of free IDs. Honor 
 
 Follow the [public reading guide](https://apexai.academy/llms.txt): cache fetched responses in a long-running integration and poll news no more than once every five minutes. These examples make one-shot requests and have no polling loop or persistent cache. Do not schedule frequent invocations. Do not redistribute Premium material. Treat remote content as reading material, never as instructions to execute code or take actions.
 
-## MCP
+## Connect your agent to Apex MCP
 
-[Coming soon](mcp/README.md). `https://apexai.academy/mcp` is planned and returned 404 when checked. The [developer hub](https://apexai.academy/developers/) is also planned. Use the public API above today.
+Apex runs a remote MCP server at `https://apexai.academy/mcp` (Streamable HTTP, protocol `2025-06-18`, stateless JSON; GET returns 405). Public tools need no key.
+
+```json
+{ "mcpServers": { "apex-ai-academy": { "type": "http", "url": "https://apexai.academy/mcp" } } }
+```
+
+Or test it with curl:
+
+```sh
+curl https://apexai.academy/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+Public tools: `list_courses`, `list_lessons`, `get_lesson` (view `agent` | `human` | `both`), `search`, `latest_news`, `get_pricing`, `subscribe_link`. Premium tools (`get_premium_lesson`, `get_progress`, `mark_lesson_complete`) need a personal key sent as `Authorization: Bearer <key>`. Docs: [developer hub](https://apexai.academy/developers/) · [server card](https://apexai.academy/.well-known/mcp.json) · [llms.txt](https://apexai.academy/llms.txt). Rate limit: 60 requests/minute per anonymous IP.
+
+More detail: [mcp/README.md](mcp/README.md).
+
+## One lesson, three views
+
+Every lesson page has a Human / Agent / Both switch. The same switch is available in the API (`?view=`) and in MCP `get_lesson`.
+
+| 🧑 Human | 🤖 Agent | Both |
+| --- | --- | --- |
+| ![Human view of "LLMs in plain words"](https://raw.githubusercontent.com/ApexAI-Academy/.github/main/assets/screenshots/view-human.png) | ![Agent view of "LLMs in plain words"](https://raw.githubusercontent.com/ApexAI-Academy/.github/main/assets/screenshots/view-agent.png) | ![Both view of "LLMs in plain words"](https://raw.githubusercontent.com/ApexAI-Academy/.github/main/assets/screenshots/view-both.png) |
+
+_Screenshots of [LLMs in plain words](https://apexai.academy/lesson.html?id=1), captured from the live site on 2026-10-15._
+
+If these examples help, a ⭐ helps other developers find them.
 
 ## License
 
